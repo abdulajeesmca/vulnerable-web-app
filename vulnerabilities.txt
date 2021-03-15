@@ -1,0 +1,156 @@
+﻿Index.php
+
+
+<a href="/product/{{$pro->id}}"><img src="{{ URL::to('/images/upload/'.$pro->images)}}" alt="" width="20%"></a>
+
+
+This Term product Id displaying URL so easy attack possible
+ 
+  $id=$id;
+  $product['product']=product::where('id',$id)->first();
+
+
+
+
+Product Query page :
+
+
+ public function store(Request $request)
+    {
+        //
+        $sale=new sale;
+        $sale->name=$request->name;
+        $sale->email=$request->email;
+        $sale->mob=$request->contact;
+        $sale->add=$request->add;
+        $sale->pid=$request->pid;
+
+
+
+
+       // $cached = serialize($sale);
+
+
+      //  echo $cached;
+
+
+
+
+       if($sale->save())
+        {
+        
+            return redirect('/')->with('status', 'Successfully seller Contact soon');
+
+
+         }
+    }
+
+
+This method code Not sanitize all input so possible to XSS attack for RXSS attack and   SXSS attack
+
+
+
+
+
+
+
+
+
+
+
+
+ Command injection : 
+I created command injection vulnerable code for 
+// Determine OS and execute the ping command. 
+ if( stristr( php_uname( 's' ), 'Windows NT' ) ) {  // Windows 
+ $cmd = shell_exec( 'ping ' . $target ); 
+ } 
+ else { 
+ // *nix 
+ $cmd = shell_exec( 'ping -c 4 ' . $target );  } 
+
+
+
+
+PHP Object Injections :
+
+
+        Php object injections possible laravel framework 
+
+
+Laravel/RCE1                              5.4.27                          (Function call)    __destruct          
+Laravel/RCE2                              5.5.39                         (Function call)    __destruct          
+Laravel/RCE3                              5.5.39                          (Function call)    __destruct     *    
+Laravel/RCE4                              5.5.39                         (Function call)    __destruct          
+Laravel/RCE5                              5.8.30                        
+  (PHP code)         __destruct     *    
+
+
+Laravel/RCE6                              5.5.*                           
+(PHP code)         __destruct     *   
+Vulnerable method for magic methods for __destruct , __wakeup()
+
+
+
+
+
+
+
+
+Php  object injection enables the arbitrary manipulation of an object content that shall be unserialized using the PHP unserialize() function.
+The correct exploitability of this type of vulnerabilities requires the presence of 2 basic interconnected elements:
+References :
+
+
+https://medium.com/swlh/exploiting-php-deserialization-56d71f03282a
+https://blog.ripstech.com/2018/php-object-injection/
+https://www.tarlogic.com/en/blog/how-php-object-injection-works-php-object-injection/
+https://www.youtube.com/watch?v=tGaVqCzhEls
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Insecure%20Deserialization/PHP.md
+
+
+
+
+Product Add page :
+
+
+public function store(Request $request)
+    {
+        //Product Store Process
+
+
+        $product=new product;
+        $product->pname=$request->pname;
+        $product->price=$request->pprice;
+        $product->pdes=$request->pdec;
+
+
+       $this->validate($request, [
+            'image' => 'required',
+            'image.*' => 'sometimes|image'
+    ]);
+
+
+           
+       $file = $request->file('image');
+
+
+       $imagess= time().$request->pname.'.'.$file->extension();
+           $file->move(public_path().'/images/upload/', $imagess);  
+           $product->images=$imagess;
+  
+        if($product->save())
+        {
+        
+            return redirect('/products')->with('check', 'Successfully Product Added');
+
+
+         }
+
+
+        }
+
+
+
+
+This method not sanitize all input therefore possible to xss attack
