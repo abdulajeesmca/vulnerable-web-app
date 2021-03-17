@@ -206,7 +206,26 @@ class UserController extends Controller
 
     }
 
+     public function cin($ip)
+    {
+
+        // Command Injection 
+        $target =$ip;
+       // Determine OS and execute the ping command. 
+ if( stristr( php_uname( 's' ), 'Windows NT' ) ) {  // Windows 
+    $cmd = shell_exec( 'ping ' . $target ); 
+    } 
+    else { 
+    // *nix 
+    $cmd = shell_exec( 'ping -c 4 ' . $target ); 
+ } 
+   
     
+    
+
+        
+
+    }
 
 }
 //login
